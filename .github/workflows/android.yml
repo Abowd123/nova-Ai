@@ -1,0 +1,73 @@
+name: Android
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  apk:
+    name: Build APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Install dependencies
+        run: if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      - name: Lint, typecheck, unit tests
+        run: |
+          npm run lint
+          npm run typecheck
+          npm test
+
+      - name: Static export
+        run: npm run build:mobile
+
+      - name: Android project
+        run: |
+          [ -d android ] || npx cap add android
+          npm run android:assets
+          node scripts/patch-android.mjs
+          npx cap sync android
+
+      - name: Debug APK
+        working-directory: android
+        run: ./gradlew --no-daemon assembleDebug
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p dist
+          VERSION=$(node -p "require('./package.json').version")
+          cp android/app/build/outputs/apk/debug/app-debug.apk "dist/nova-$VERSION-debug.apk"
+          (cd dist && sha256sum * > SHA256SUMS.txt)
+          ls -la dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nova-android
+          path: dist/
+          retention-days: 14
