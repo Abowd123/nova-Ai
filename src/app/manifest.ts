@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { clientEnv } from "@/env";
 
+// Required for the static export (Android app); harmless for the web build.
+export const dynamic = "force-static";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
