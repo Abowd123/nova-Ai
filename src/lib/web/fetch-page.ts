@@ -1,4 +1,4 @@
-import { isIP } from "node:net";
+import { isIP } from "@/lib/security/ip";
 import { isPrivateAddress } from "@/lib/security/ssrf";
 import { extractReadable } from "./readability";
 import { hostMatches } from "./search";
