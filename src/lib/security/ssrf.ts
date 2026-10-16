@@ -1,4 +1,4 @@
-import { isIP } from "node:net";
+import { isIP } from "./ip";
 
 function ipv4ToInt(ip: string): number {
   return ip.split(".").reduce((acc, octet) => (acc << 8) + Number(octet), 0) >>> 0;
