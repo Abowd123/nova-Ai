@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Material You (M3) inspired tokens, baseline violet scheme.
+ * Values are HSL channels so Tailwind can apply alpha: bg-primary/10.
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+    --background: 285 100% 98%;
+    --foreground: 270 8% 12%;
+    --surface-container-low: 280 50% 96%;
+    --surface-container: 275 33% 94%;
+    --surface-container-high: 270 20% 91%;
+    --card: 280 60% 97%;
+    --card-foreground: 270 8% 12%;
+    --primary: 262 34% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 263 50% 91%;
+    --secondary-foreground: 258 25% 14%;
+    --muted: 270 20% 93%;
+    --muted-foreground: 265 7% 30%;
+    --accent: 270 30% 91%;
+    --accent-foreground: 270 8% 12%;
+    --destructive: 3 71% 41%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 64% 28%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 45%;
+    --warning-foreground: 30 50% 10%;
+    --border: 268 12% 82%;
+    --outline: 264 5% 47%;
+    --input: 268 10% 76%;
+    --ring: 262 34% 48%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: 260 14% 8%;
+    --foreground: 280 9% 90%;
+    --surface-container-low: 270 10% 11%;
+    --surface-container: 260 10% 13%;
+    --surface-container-high: 260 8% 17%;
+    --card: 270 10% 11%;
+    --card-foreground: 280 9% 90%;
+    --primary: 258 100% 87%;
+    --primary-foreground: 260 58% 28%;
+    --secondary: 263 16% 30%;
+    --secondary-foreground: 263 50% 91%;
+    --muted: 260 8% 17%;
+    --muted-foreground: 268 9% 79%;
+    --accent: 260 8% 21%;
+    --accent-foreground: 280 9% 90%;
+    --destructive: 2 75% 83%;
+    --destructive-foreground: 2 71% 22%;
+    --success: 142 50% 70%;
+    --success-foreground: 142 60% 12%;
+    --warning: 40 90% 65%;
+    --warning-foreground: 30 50% 10%;
+    --border: 265 7% 30%;
+    --outline: 268 5% 58%;
+    --input: 265 7% 34%;
+    --ring: 258 100% 87%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    overscroll-behavior-y: none;
+  }
+
+  /* Visible keyboard focus everywhere, even for elements without ring utilities. */
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Android app: keep content out of the display cutout / gesture areas in landscape. */
+  .native-app body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  .native-app {
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ---------------- Rich message rendering ---------------- */
+@layer components {
+  .nova-markdown {
+    @apply break-words text-[0.95rem] leading-relaxed;
+  }
+  .nova-markdown > * + * {
+    @apply mt-2;
+  }
+  /* Each paragraph/list item picks its own direction: mixed Arabic/English stays readable. */
+  .nova-markdown :where(p, li, blockquote, h1, h2, h3, h4, h5, h6, td, th) {
+    unicode-bidi: plaintext;
+  }
+  .nova-markdown :where(p) {
+    @apply my-2;
+  }
+  .nova-markdown :where(h1) {
+    @apply mb-2 mt-4 text-xl font-bold;
+  }
+  .nova-markdown :where(h2) {
+    @apply mb-2 mt-4 text-lg font-bold;
+  }
+  .nova-markdown :where(h3, h4, h5, h6) {
+    @apply mb-1 mt-3 font-semibold;
+  }
+  .nova-markdown :where(ul) {
+    @apply my-2 list-disc ps-6;
+  }
+  .nova-markdown :where(ol) {
+    @apply my-2 list-decimal ps-6;
+  }
+  .nova-markdown :where(li) {
+    @apply my-1;
+  }
+  .nova-markdown :where(li > input[type="checkbox"]) {
+    @apply me-2 align-middle;
+  }
+  .nova-markdown :where(blockquote) {
+    @apply my-3 border-s-4 border-primary/40 ps-3 text-muted-foreground;
+  }
+  .nova-markdown :where(hr) {
+    @apply my-4 border-border;
+  }
+  .nova-markdown .katex-display {
+    @apply my-3 overflow-x-auto overflow-y-hidden py-1;
+    direction: ltr;
+  }
+  .nova-markdown .katex {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  /* highlight.js tokens (Material-ish palette, light + dark). */
+  .hljs-comment,
+  .hljs-quote {
+    @apply italic text-muted-foreground;
+  }
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-built_in,
+  .hljs-meta .hljs-keyword {
+    color: hsl(262 52% 47%);
+  }
+  .hljs-string,
+  .hljs-attr,
+  .hljs-template-tag,
+  .hljs-addition {
+    color: hsl(142 55% 30%);
+  }
+  .hljs-number,
+  .hljs-literal,
+  .hljs-symbol,
+  .hljs-bullet {
+    color: hsl(24 85% 42%);
+  }
+  .hljs-title,
+  .hljs-section,
+  .hljs-title.function_ {
+    color: hsl(211 70% 42%);
+  }
+  .hljs-type,
+  .hljs-class .hljs-title,
+  .hljs-variable,
+  .hljs-template-variable {
+    color: hsl(330 60% 42%);
+  }
+  .hljs-deletion {
+    color: hsl(3 71% 45%);
+  }
+  .dark .hljs-keyword,
+  .dark .hljs-selector-tag,
+  .dark .hljs-built_in {
+    color: hsl(265 90% 80%);
+  }
+  .dark .hljs-string,
+  .dark .hljs-attr,
+  .dark .hljs-addition {
+    color: hsl(142 50% 68%);
+  }
+  .dark .hljs-number,
+  .dark .hljs-literal,
+  .dark .hljs-symbol {
+    color: hsl(30 90% 70%);
+  }
+  .dark .hljs-title,
+  .dark .hljs-section {
+    color: hsl(205 90% 75%);
+  }
+  .dark .hljs-type,
+  .dark .hljs-variable {
+    color: hsl(330 80% 78%);
+  }
+}
